@@ -1,23 +1,24 @@
 package com.example.notes
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity(), INotesRVAdapter {
 
-    lateinit var viewModel: NoteViewModel
-    private var input: EditText = findViewById(R.id.input)
+    private lateinit var viewModel: NoteViewModel
+    private var input: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        input = findViewById(R.id.input);
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -30,8 +31,8 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         ).get(NoteViewModel::class.java)
 
-        viewModel.allNotes.observe(this, Observer {
-            it?.let {
+        viewModel.allNotes.observe(this, { notes ->
+            notes.let {
                 adapter.updateList(it)
             }
         })
@@ -39,14 +40,14 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
 
     override fun onItemClicked(note: Note) {
         viewModel.deleteNote(note)
-        Toast.makeText(this, "${note} deleted", Toast.LENGTH_LONG)
+        Toast.makeText(this, "${note.text} deleted", Toast.LENGTH_LONG).show()
     }
 
     fun submitData(view: View) {
-        val inputText = input.text.toString()
+        val inputText = input?.text.toString()
         if (inputText.isNotEmpty()) {
             viewModel.insertNote(Note(inputText))
-            Toast.makeText(this, "${inputText} inserted", Toast.LENGTH_LONG)
+            Toast.makeText(this, "$inputText inserted", Toast.LENGTH_LONG).show()
         }
     }
 }

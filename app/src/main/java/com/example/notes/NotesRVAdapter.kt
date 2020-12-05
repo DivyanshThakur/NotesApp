@@ -8,14 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class NotesRVAdapter(private val context: Context, val listener: INotesRVAdapter) :
+class NotesRVAdapter(private val context: Context, private val listener: INotesRVAdapter) :
     RecyclerView.Adapter<NotesRVAdapter.NoteViewHolder>() {
 
     private val allNotes = ArrayList<Note>()
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val text: TextView = itemView.findViewById<TextView>(R.id.text)
-        val deleteButton: ImageView = itemView.findViewById<ImageView>(R.id.deleteButton)
+        val text: TextView = itemView.findViewById(R.id.text)
+        val deleteButton: ImageView = itemView.findViewById(R.id.deleteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
